@@ -33,7 +33,7 @@ export async function scrapeAmazon(keyword: string, page = "1"): Promise<Product
             products.push(new Product(
                 title,
                 ratingText,
-                numberOfReviews !== null ? parseInt(numberOfReviews) : null,
+                numberOfReviews !== null ? Number(numberOfReviews.replace(",", ".")) : 0,
                 imageUrl));
         });
 
