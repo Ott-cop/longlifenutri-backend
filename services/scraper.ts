@@ -40,7 +40,6 @@ export async function scrapeAmazon(keyword: string, page = "1"): Promise<Product
         return products;
 
     } catch (error) {
-        console.log(error);
         throw new Error("Failed to process the scrape");
     }
 }
