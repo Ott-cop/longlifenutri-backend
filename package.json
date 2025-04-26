@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "longlifenutri-backend",
   "module": "index.ts",
   "type": "module",
   "private": true,
