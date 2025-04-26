@@ -1,6 +1,6 @@
 import axios from "axios";
 import { JSDOM } from "jsdom";
-import { Product } from "../models/Product";
+import { type Product } from "../models/Product";
 
 export async function scrapeAmazon(keyword: string, page = "1"): Promise<Product[]> {
     try {
@@ -30,11 +30,12 @@ export async function scrapeAmazon(keyword: string, page = "1"): Promise<Product
             const numberOfReviews = reviewsEl?.textContent?.trim() || null;
             const imageUrl = imageEl?.getAttribute('src') || null;
 
-            products.push(new Product(
-                title,
-                ratingText,
-                numberOfReviews !== null ? Number(numberOfReviews.replace(",", ".")) : 0,
-                imageUrl));
+            products.push({
+                title: title,
+                rating: ratingText,
+                numberOfReviews: numberOfReviews !== null ? Number(numberOfReviews.replace(",", ".")) : 0,
+                imageUrl: imageUrl
+            });
         });
 
         return products;
