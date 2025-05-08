@@ -5,12 +5,23 @@ import { type Product } from "../models/Product";
 export async function scrapeAmazon(keyword: string, page = "1"): Promise<Product[]> {
     try {
         const url = `https://www.amazon.com/s?k=${encodeURIComponent(keyword)}&page=${encodeURIComponent(page)}`;
+      
 
-        const response = await axios.get(url, { 
+        const response = await axios.get(url, {
             headers: {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36",
+                // 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+                // 'Accept-Language': 'pt-BR,pt;q=0.9',
+                'Accept': 'text/html',
             }
         });
+
+        // const response = await fetch(url, {
+        //     headers: {
+        //       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        //       'Accept-Language': 'en-US,en;q=0.9',
+        //       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        //     },
+        //   });
 
         const dom = new JSDOM(response.data);
         const document = dom.window.document;
@@ -29,6 +40,7 @@ export async function scrapeAmazon(keyword: string, page = "1"): Promise<Product
             const ratingText = ratingEl?.textContent?.trim() || null;
             const numberOfReviews = reviewsEl?.textContent?.trim() || null;
             const imageUrl = imageEl?.getAttribute('src') || null;
+            
 
             products.push({
                 title: title,
@@ -38,9 +50,11 @@ export async function scrapeAmazon(keyword: string, page = "1"): Promise<Product
             });
         });
 
+        console.log(products);
+
         return products;
 
-    } catch (error) {
-        throw new Error("Failed to process the scrape");
+    } catch (error: any) {
+        throw new Error(error);
     }
 }
